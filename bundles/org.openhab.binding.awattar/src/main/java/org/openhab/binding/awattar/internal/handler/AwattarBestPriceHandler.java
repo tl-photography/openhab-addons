@@ -28,6 +28,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.SortedMap;
@@ -37,8 +38,8 @@ import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.binding.awattar.internal.AwattarBestPriceConfiguration;
 import org.openhab.binding.awattar.internal.AwattarBestPriceResult;
-import org.openhab.binding.awattar.internal.AwattarBestpriceConfiguration;
 import org.openhab.binding.awattar.internal.AwattarConsecutiveBestPriceResult;
 import org.openhab.binding.awattar.internal.AwattarNonConsecutiveBestPriceResult;
 import org.openhab.binding.awattar.internal.AwattarPrice;
@@ -170,15 +171,20 @@ public class AwattarBestpriceHandler extends BaseThingHandler {
         } else {
             List<AwattarPrice> range = getPriceRange(bridgeHandler, timerange,
                     (o1, o2) -> Double.compare(o1.getPrice(), o2.getPrice()));
+
+            // sort in descending order when inverted
+            if (config.inverted) {
+                Collections.reverse(range);
+            }
+
             AwattarNonConsecutiveBestPriceResult res = new AwattarNonConsecutiveBestPriceResult(config.length,
                     bridgeHandler.getTimeZone());
-            int ct = 0;
-            for (AwattarPrice price : range) {
-                res.addMember(price);
-                if (++ct >= config.length) {
-                    break;
-                }
+
+            // take up to config.length prices
+            for (int i = 0; i < Math.min(config.length, range.size()); i++) {
+                res.addMember(range.get(i));
             }
+
             result = res;
         }
         String channelId = channelUID.getIdWithoutGroup();

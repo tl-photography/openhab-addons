@@ -36,7 +36,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The {@link AwattarHandlerFactory} is responsible for creating things and thing
+ * The {@link AwattarHandlerFactory} is responsible for creating things and
+ * thing
  * handlers.
  *
  * @author Wolfgang Klimt - Initial contribution
@@ -74,7 +75,7 @@ public class AwattarHandlerFactory extends BaseThingHandlerFactory {
             return new AwattarPriceHandler(thing, timeZoneProvider);
         }
         if (THING_TYPE_BESTPRICE.equals(thingTypeUID)) {
-            return new AwattarBestpriceHandler(thing, timeZoneProvider);
+            return new AwattarBestPriceHandler(thing, timeZoneProvider);
         }
 
         logger.warn("Unknown thing type {}, not creating handler!", thingTypeUID);

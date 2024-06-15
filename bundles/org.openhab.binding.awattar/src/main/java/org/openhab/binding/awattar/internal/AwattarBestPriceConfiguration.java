@@ -20,15 +20,17 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  * @author Wolfgang Klimt - initial contribution
  */
 @NonNullByDefault
-public class AwattarBestpriceConfiguration {
+public class AwattarBestPriceConfiguration {
 
     public int rangeStart;
     public int rangeDuration;
     public int length;
     public boolean consecutive;
+    public boolean inverted;
 
     @Override
     public String toString() {
-        return String.format("{ s: %d, d: %d, l: %d, c: %b )", rangeStart, rangeDuration, length, consecutive);
+        return String.format("{ s: %d, d: %d, l: %d, c: %b, i: %b )", rangeStart, rangeDuration, length, consecutive,
+                inverted);
     }
 }
