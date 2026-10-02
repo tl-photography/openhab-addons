@@ -82,13 +82,6 @@ public class AwattarBestPriceHandler extends BaseThingHandler {
 
     @Override
     public void initialize() {
-        AwattarBestPriceConfiguration config = getConfigAs(AwattarBestPriceConfiguration.class);
-
-        if (config.length >= config.rangeDuration) {
-            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR, "@text/error.length.value");
-            return;
-        }
-
         synchronized (this) {
             ScheduledFuture<?> localRefresher = thingRefresher;
             if (localRefresher == null || localRefresher.isCancelled()) {
@@ -152,6 +145,10 @@ public class AwattarBestPriceHandler extends BaseThingHandler {
 
         AwattarBestPriceResult result;
         List<AwattarPrice> range = getPriceRange(bridgeHandler, timerange);
+        if (config.length > range.size()) {
+            updateState(channelUID, state);
+            return;
+        }
 
         if (config.consecutive) {
             result = new AwattarConsecutiveBestPriceResult(range, config.length, zoneId);

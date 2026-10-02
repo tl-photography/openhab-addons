@@ -80,7 +80,7 @@ public class AwattarNonConsecutiveBestPriceResult extends AwattarBestPriceResult
             if (second) {
                 res.append(',');
             }
-            res.append(getHourFrom(price.timerange().start(), zoneId));
+            res.append(formatPriceInterval(price, zoneId));
             second = true;
         }
         return res.toString();
